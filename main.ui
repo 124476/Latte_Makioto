@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>684</width>
-    <height>527</height>
+    <width>791</width>
+    <height>524</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,35 +18,9 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>681</width>
+     <width>791</width>
      <height>471</height>
     </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="NewButton">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>480</y>
-     <width>91</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Добавить</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="EditButton">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>480</y>
-     <width>91</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Редактировать</string>
    </property>
   </widget>
  </widget>

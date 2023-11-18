@@ -9,7 +9,7 @@ class MyWidget(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi('main.ui', self)
-        con = sqlite3.connect("../git_project1/coffee.sqlite")
+        con = sqlite3.connect("coffee.sqlite")
         cur = con.cursor()
         res = cur.execute("SELECT * FROM Coffi").fetchall()
         self.tableWidget.setColumnCount(len(res[0]))
