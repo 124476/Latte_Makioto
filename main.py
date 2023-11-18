@@ -1,14 +1,15 @@
 import sys
 import sqlite3
 
-from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QMessageBox
+from UI.mainWin import Ui_Form
+from UI.addEditCoffeForm import Ui_Form2
 
 
-class AddFilmWidget(QMainWindow):
+class AddFilmWidget(QMainWindow, Ui_Form2):
     def __init__(self, parent=None, res=[]):
         super().__init__(parent)
-        uic.loadUi('addEditCoffeeForm.ui', self)
+        self.setupUi(self)
 
         if res:
             self.res = res[0]
@@ -24,7 +25,7 @@ class AddFilmWidget(QMainWindow):
 
     def r2(self):
         try:
-            con = sqlite3.connect('coffee.sqlite')
+            con = sqlite3.connect('data/coffee.sqlite')
             cur = con.cursor()
             cur.execute(f'''UPDATE coffi
              SET Name = "{self.NameText.text()}", 
@@ -45,7 +46,7 @@ class AddFilmWidget(QMainWindow):
 
     def r(self):
         try:
-            con = sqlite3.connect('coffee.sqlite')
+            con = sqlite3.connect('data/coffee.sqlite')
             cur = con.cursor()
             cur.execute(f'''INSERT INTO coffi(Name, Stepen, Molot, Vkys, Sum, Obem) 
             VALUES("{self.NameText.text()}", {self.StepenText.text()}, "{self.MolotText.text()}",
@@ -60,16 +61,16 @@ class AddFilmWidget(QMainWindow):
             error.exec_()
 
 
-class MyWidget(QMainWindow):
+class MyWidget(QMainWindow, Ui_Form):
     def __init__(self):
         super().__init__()
-        uic.loadUi('main.ui', self)
+        self.setupUi(self)
         self.NewButton.clicked.connect(self.add)
         self.EditButton.clicked.connect(self.edit)
         self.updatetab()
 
     def updatetab(self):
-        con = sqlite3.connect("coffee.sqlite")
+        con = sqlite3.connect("data/coffee.sqlite")
         cur = con.cursor()
         res = cur.execute("SELECT * FROM Coffi").fetchall()
         self.tableWidget.setColumnCount(len(res[0]))
@@ -85,7 +86,7 @@ class MyWidget(QMainWindow):
         rows = list(set([i.row() for i in self.tableWidget.selectedItems()]))
         ids = [self.tableWidget.item(i, 0).text() for i in rows]
         if len(ids) == 1:
-            con = sqlite3.connect("coffee.sqlite")
+            con = sqlite3.connect("data/coffee.sqlite")
             cur = con.cursor()
             res = cur.execute(
                 f'''SELECT Id, Name, Stepen, Molot, Vkys, Sum, Obem FROM Coffi WHERE id = {ids[0]}''').fetchall()
