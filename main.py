@@ -2,13 +2,13 @@ import sys
 import sqlite3
 
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QMessageBox
 
 
 class AddFilmWidget(QMainWindow):
     def __init__(self, parent=None, res=[]):
         super().__init__(parent)
-        uic.loadUi('addEditCoffeForm.ui', self)
+        uic.loadUi('addEditCoffeeForm.ui', self)
 
         if res:
             self.res = res[0]
@@ -18,22 +18,46 @@ class AddFilmWidget(QMainWindow):
             self.VkysText.setText(str(res[0][4]))
             self.SumText.setText(str(res[0][5]))
             self.ObemText.setText(str(res[0][6]))
+            self.pushButton.clicked.connect(self.r2)
+        else:
             self.pushButton.clicked.connect(self.r)
 
-    def r(self):
-        if self.res[0] == 0:
-            self.con = sqlite3.connect('films_db.sqlite')
-            cur = self.con.cursor()
-            res = cur.execute(f'''SELECT id FROM films''').fetchall()
-            res = max([i[0] for i in res])
-            cur.execute(f'''INSERT INTO films(Name, Stepen, Molot, Vkys, Sum, Obem) 
-            VALUES({res + 1}, "{self.NameText.text()}", {self.StepenText.text()}, {self.MolotText.text()},
-            {self.VkysText.text()}, {self.SumText.text()}, {self.ObemText.text()})''')
-            self.con.commit()
+    def r2(self):
+        try:
+            con = sqlite3.connect('coffee.sqlite')
+            cur = con.cursor()
+            cur.execute(f'''UPDATE coffi
+             SET Name = "{self.NameText.text()}", 
+             Stepen = {self.StepenText.text()}, 
+             Molot = "{self.MolotText.text()}", 
+             Vkys = "{self.VkysText.text()}", 
+             Sum = {self.SumText.text()}, 
+             Obem = {self.ObemText.text()}
+             WHERE id = {self.res[0]}''')
+            con.commit()
             self.parent().updatetab()
             self.close()
-        else:
-            self.statusbar.showMessage('Неверно заполнена форма')
+        except:
+            error = QMessageBox()
+            error.setText("Неверно заполнена форма")
+            error.setWindowTitle("Error")
+            error.exec_()
+
+    def r(self):
+        try:
+            con = sqlite3.connect('coffee.sqlite')
+            cur = con.cursor()
+            cur.execute(f'''INSERT INTO coffi(Name, Stepen, Molot, Vkys, Sum, Obem) 
+            VALUES("{self.NameText.text()}", {self.StepenText.text()}, "{self.MolotText.text()}",
+            "{self.VkysText.text()}", {self.SumText.text()}, {self.ObemText.text()})''')
+            con.commit()
+            self.parent().updatetab()
+            self.close()
+        except:
+            error = QMessageBox()
+            error.setText("Неверно заполнена форма")
+            error.setWindowTitle("Error")
+            error.exec_()
 
 
 class MyWidget(QMainWindow):
